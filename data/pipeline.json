@@ -1,0 +1,814 @@
+{
+  "meta": {
+    "tests": {
+      "count": 196,
+      "passed": true
+    },
+    "repo": "https://github.com/Aryan7512/team-project-planner",
+    "commit": "4a2edcd6327ab1614493fd38c4b74d75dfacbf0b",
+    "commit_url": "https://github.com/Aryan7512/team-project-planner/commit/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b",
+    "captured_at": "2026-11-12T16:18:13Z",
+    "python": "3.14.7",
+    "django": "5.2.19"
+  },
+  "setup": [
+    "Users alice (Alice Smith) and bob (Bob Lee) exist.",
+    "Team core has admin alice and members alice and bob.",
+    "Board Sprint 0 belongs to core and is CLOSED; its one task is COMPLETE.",
+    "The requests then ran in the order listed, so the ones after the first also see carol, whom the first one adds."
+  ],
+  "labels": {
+    "1f4d88b9-ec47-4477-8a3b-27a4eecfe38d": "user alice",
+    "1e250a18-aa64-4dc2-8eae-24cc0fcee358": "user bob",
+    "6e6849a5-bed3-4305-a830-1a51357ad529": "team core",
+    "62566392-0ec2-48cc-93a3-cb9588dbeac5": "board Sprint 0 (closed)",
+    "181afcd9-50e2-4b05-aaf2-ea2902824e22": "user carol",
+    "db58ea50-9741-4a0f-ac2b-ae6a9c76d904": "matches no record"
+  },
+  "scenarios": [
+    {
+      "id": "new-user",
+      "title": "A new user",
+      "summary": "Create a user whose name is free.",
+      "service": "UserService",
+      "method": "create_user",
+      "request": "{\"name\": \"carol\", \"display_name\": \"Carol Diaz\"}",
+      "python": "UserService().create_user('{\"name\": \"carol\", \"display_name\": \"Carol Diaz\"}')",
+      "stopped_at": "reply",
+      "stages": [
+        {
+          "key": "parse",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 23,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L23",
+            "code": "data = parse_request(request)"
+          }
+        },
+        {
+          "key": "check",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 24,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L24",
+            "code": "name = text_field(data, \"name\", max_length=limits.NAME_MAX_LENGTH)"
+          }
+        },
+        {
+          "key": "rules",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 27,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L27",
+            "code": "with transaction.atomic():"
+          }
+        },
+        {
+          "key": "save",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 30,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L30",
+            "code": "user = User.objects.create(name=name, display_name=display_name)"
+          }
+        },
+        {
+          "key": "reply",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 31,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L31",
+            "code": "return to_json({\"id\": str(user.id)})"
+          }
+        }
+      ],
+      "events": [
+        {
+          "helper": "parse_request",
+          "ok": true,
+          "keys": [
+            "name",
+            "display_name"
+          ]
+        },
+        {
+          "helper": "text_field",
+          "field": "name",
+          "present": true,
+          "limit": 64,
+          "ok": true,
+          "length": 5
+        },
+        {
+          "helper": "text_field",
+          "field": "display_name",
+          "present": true,
+          "limit": 64,
+          "ok": true,
+          "length": 10
+        }
+      ],
+      "sql": [
+        {
+          "sql": "BEGIN IMMEDIATE",
+          "kind": "transaction"
+        },
+        {
+          "sql": "SELECT 1 AS \"a\" FROM \"planner_user\" WHERE \"planner_user\".\"name\" = 'carol' LIMIT 1",
+          "kind": "read"
+        },
+        {
+          "sql": "INSERT INTO \"planner_user\" (\"id\", \"creation_time\", \"name\", \"display_name\") VALUES ('181afcd950e24b05aaf2ea2902824e22', '2026-11-12 16:17:23.201057', 'carol', 'Carol Diaz')",
+          "kind": "write"
+        },
+        {
+          "sql": "COMMIT",
+          "kind": "transaction"
+        }
+      ],
+      "outcome": {
+        "kind": "response",
+        "body": "{\"id\": \"181afcd9-50e2-4b05-aaf2-ea2902824e22\"}"
+      },
+      "rows_before": {
+        "User": 2,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "rows_after": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "changed": true
+    },
+    {
+      "id": "broken-json",
+      "title": "JSON cut short",
+      "summary": "The request text stops before its closing brace.",
+      "service": "UserService",
+      "method": "create_user",
+      "request": "{\"name\": \"dave\", \"display_name\": \"Dave\"",
+      "python": "UserService().create_user('{\"name\": \"dave\", \"display_name\": \"Dave\"')",
+      "stopped_at": "parse",
+      "stages": [
+        {
+          "key": "parse",
+          "status": "failed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 23,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L23",
+            "code": "data = parse_request(request)"
+          }
+        },
+        {
+          "key": "check",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 24,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L24",
+            "code": "name = text_field(data, \"name\", max_length=limits.NAME_MAX_LENGTH)"
+          }
+        },
+        {
+          "key": "rules",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 27,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L27",
+            "code": "with transaction.atomic():"
+          }
+        },
+        {
+          "key": "save",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 30,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L30",
+            "code": "user = User.objects.create(name=name, display_name=display_name)"
+          }
+        },
+        {
+          "key": "reply",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 31,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L31",
+            "code": "return to_json({\"id\": str(user.id)})"
+          }
+        }
+      ],
+      "events": [
+        {
+          "helper": "parse_request",
+          "ok": false,
+          "error": "Request is not valid JSON: Expecting ',' delimiter at position 39."
+        }
+      ],
+      "sql": [],
+      "outcome": {
+        "kind": "error",
+        "exception": "InvalidInputError",
+        "builtin": "ValueError",
+        "code": "invalid_input",
+        "http": 400,
+        "message": "Request is not valid JSON: Expecting ',' delimiter at position 39.",
+        "raised_at": {
+          "file": "planner/validators.py",
+          "line": 26,
+          "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/validators.py#L26",
+          "code": "except json.JSONDecodeError as exc:\n    raise InvalidInputError(f\"Request is not valid JSON: {exc.msg} at position {exc.pos}.\") from exc",
+          "function": "parse_request"
+        }
+      },
+      "rows_before": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "rows_after": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "changed": false
+    },
+    {
+      "id": "name-too-long",
+      "title": "Name one character too long",
+      "summary": "A name of 65 characters, one over the limit.",
+      "service": "UserService",
+      "method": "create_user",
+      "request": "{\"name\": \"alexandra-catherine-montgomery-wellington-fitzgerald-hamilton-the\", \"display_name\": \"Alexandra\"}",
+      "python": "UserService().create_user('{\"name\": \"alexandra-catherine-montgomery-wellington-fitzgerald-hamilton-the\", \"display_name\": \"Alexandra\"}')",
+      "stopped_at": "check",
+      "stages": [
+        {
+          "key": "parse",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 23,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L23",
+            "code": "data = parse_request(request)"
+          }
+        },
+        {
+          "key": "check",
+          "status": "failed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 24,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L24",
+            "code": "name = text_field(data, \"name\", max_length=limits.NAME_MAX_LENGTH)"
+          }
+        },
+        {
+          "key": "rules",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 27,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L27",
+            "code": "with transaction.atomic():"
+          }
+        },
+        {
+          "key": "save",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 30,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L30",
+            "code": "user = User.objects.create(name=name, display_name=display_name)"
+          }
+        },
+        {
+          "key": "reply",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 31,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L31",
+            "code": "return to_json({\"id\": str(user.id)})"
+          }
+        }
+      ],
+      "events": [
+        {
+          "helper": "parse_request",
+          "ok": true,
+          "keys": [
+            "name",
+            "display_name"
+          ]
+        },
+        {
+          "helper": "text_field",
+          "field": "name",
+          "present": true,
+          "limit": 64,
+          "ok": false,
+          "error": "'name' must be at most 64 characters (got 65)."
+        }
+      ],
+      "sql": [],
+      "outcome": {
+        "kind": "error",
+        "exception": "InvalidInputError",
+        "builtin": "ValueError",
+        "code": "invalid_input",
+        "http": 400,
+        "message": "'name' must be at most 64 characters (got 65).",
+        "raised_at": {
+          "file": "planner/validators.py",
+          "line": 75,
+          "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/validators.py#L75",
+          "code": "if len(value) > max_length:\n    raise InvalidInputError(f\"'{key}' must be at most {max_length} characters (got {len(value)}).\")",
+          "function": "text_field"
+        }
+      },
+      "rows_before": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "rows_after": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "changed": false
+    },
+    {
+      "id": "duplicate-name",
+      "title": "Name already taken",
+      "summary": "Try to create a second user called alice.",
+      "service": "UserService",
+      "method": "create_user",
+      "request": "{\"name\": \"alice\", \"display_name\": \"Another Alice\"}",
+      "python": "UserService().create_user('{\"name\": \"alice\", \"display_name\": \"Another Alice\"}')",
+      "stopped_at": "rules",
+      "stages": [
+        {
+          "key": "parse",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 23,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L23",
+            "code": "data = parse_request(request)"
+          }
+        },
+        {
+          "key": "check",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 24,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L24",
+            "code": "name = text_field(data, \"name\", max_length=limits.NAME_MAX_LENGTH)"
+          }
+        },
+        {
+          "key": "rules",
+          "status": "failed",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 27,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L27",
+            "code": "with transaction.atomic():"
+          }
+        },
+        {
+          "key": "save",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 30,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L30",
+            "code": "user = User.objects.create(name=name, display_name=display_name)"
+          }
+        },
+        {
+          "key": "reply",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/users.py",
+            "line": 31,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L31",
+            "code": "return to_json({\"id\": str(user.id)})"
+          }
+        }
+      ],
+      "events": [
+        {
+          "helper": "parse_request",
+          "ok": true,
+          "keys": [
+            "name",
+            "display_name"
+          ]
+        },
+        {
+          "helper": "text_field",
+          "field": "name",
+          "present": true,
+          "limit": 64,
+          "ok": true,
+          "length": 5
+        },
+        {
+          "helper": "text_field",
+          "field": "display_name",
+          "present": true,
+          "limit": 64,
+          "ok": true,
+          "length": 13
+        }
+      ],
+      "sql": [
+        {
+          "sql": "BEGIN IMMEDIATE",
+          "kind": "transaction"
+        },
+        {
+          "sql": "SELECT 1 AS \"a\" FROM \"planner_user\" WHERE \"planner_user\".\"name\" = 'alice' LIMIT 1",
+          "kind": "read"
+        },
+        {
+          "sql": "ROLLBACK",
+          "kind": "transaction"
+        }
+      ],
+      "outcome": {
+        "kind": "error",
+        "exception": "DuplicateError",
+        "builtin": "ValueError",
+        "code": "duplicate",
+        "http": 409,
+        "message": "A user named 'alice' already exists.",
+        "raised_at": {
+          "file": "planner/services/users.py",
+          "line": 29,
+          "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L29",
+          "code": "if User.objects.filter(name=name).exists():\n    raise DuplicateError(f\"A user named '{name}' already exists.\")",
+          "function": "create_user"
+        }
+      },
+      "rows_before": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "rows_after": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "changed": false
+    },
+    {
+      "id": "unknown-member",
+      "title": "One unknown id in a batch",
+      "summary": "Add carol and an id that matches nobody to team core.",
+      "service": "TeamService",
+      "method": "add_users_to_team",
+      "request": "{\"id\": \"6e6849a5-bed3-4305-a830-1a51357ad529\", \"users\": [\"181afcd9-50e2-4b05-aaf2-ea2902824e22\", \"db58ea50-9741-4a0f-ac2b-ae6a9c76d904\"]}",
+      "python": "TeamService().add_users_to_team('{\"id\": \"6e6849a5-bed3-4305-a830-1a51357ad529\", \"users\": [\"181afcd9-50e2-4b05-aaf2-ea2902824e22\", \"db58ea50-9741-4a0f-ac2b-ae6a9c76d904\"]}')",
+      "stopped_at": "rules",
+      "stages": [
+        {
+          "key": "parse",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/teams.py",
+            "line": 79,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/teams.py#L79",
+            "code": "data = parse_request(request)"
+          }
+        },
+        {
+          "key": "check",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/teams.py",
+            "line": 80,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/teams.py#L80",
+            "code": "team_id = id_field(data, \"id\")"
+          }
+        },
+        {
+          "key": "rules",
+          "status": "failed",
+          "source": {
+            "file": "planner/services/teams.py",
+            "line": 83,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/teams.py#L83",
+            "code": "with transaction.atomic():"
+          }
+        },
+        {
+          "key": "save",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/teams.py",
+            "line": 96,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/teams.py#L96",
+            "code": "TeamMembership.objects.bulk_create([TeamMembership(team=team, user=user) for user in new_members])"
+          }
+        },
+        {
+          "key": "reply",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/teams.py",
+            "line": 97,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/teams.py#L97",
+            "code": "return to_json({})"
+          }
+        }
+      ],
+      "events": [
+        {
+          "helper": "parse_request",
+          "ok": true,
+          "keys": [
+            "id",
+            "users"
+          ]
+        },
+        {
+          "helper": "id_field",
+          "field": "id",
+          "present": true,
+          "ok": true,
+          "length": 36
+        },
+        {
+          "helper": "id_list_field",
+          "field": "users",
+          "present": true,
+          "limit": 50,
+          "ok": true,
+          "count": 2
+        },
+        {
+          "helper": "get_by_id",
+          "label": "Team",
+          "ok": true,
+          "found": [
+            "core"
+          ]
+        },
+        {
+          "helper": "get_many_by_id",
+          "label": "User",
+          "ok": false,
+          "error": "These user ids do not exist: db58ea50-9741-4a0f-ac2b-ae6a9c76d904."
+        }
+      ],
+      "sql": [
+        {
+          "sql": "BEGIN IMMEDIATE",
+          "kind": "transaction"
+        },
+        {
+          "sql": "SELECT \"planner_team\".\"id\", \"planner_team\".\"creation_time\", \"planner_team\".\"name\", \"planner_team\".\"description\", \"planner_team\".\"admin_id\" FROM \"planner_team\" WHERE \"planner_team\".\"id\" = '6e6849a5bed34305a8301a51357ad529' ORDER BY \"planner_team\".\"id\" ASC LIMIT 1",
+          "kind": "read"
+        },
+        {
+          "sql": "SELECT \"planner_user\".\"id\", \"planner_user\".\"creation_time\", \"planner_user\".\"name\", \"planner_user\".\"display_name\" FROM \"planner_user\" WHERE \"planner_user\".\"id\" IN ('181afcd950e24b05aaf2ea2902824e22', 'db58ea5097414a0fac2bae6a9c76d904')",
+          "kind": "read"
+        },
+        {
+          "sql": "ROLLBACK",
+          "kind": "transaction"
+        }
+      ],
+      "outcome": {
+        "kind": "error",
+        "exception": "NotFoundError",
+        "builtin": "LookupError",
+        "code": "not_found",
+        "http": 404,
+        "message": "These user ids do not exist: db58ea50-9741-4a0f-ac2b-ae6a9c76d904.",
+        "raised_at": {
+          "file": "planner/lookups.py",
+          "line": 46,
+          "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/lookups.py#L46",
+          "code": "if missing:\n    raise NotFoundError(f\"These {label.lower()} ids do not exist: {', '.join(missing)}.\")",
+          "function": "get_many_by_id"
+        }
+      },
+      "rows_before": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "rows_after": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "changed": false
+    },
+    {
+      "id": "closed-board",
+      "title": "Task for a closed board",
+      "summary": "Add a task to Sprint 0, which is already closed.",
+      "service": "ProjectBoardService",
+      "method": "add_task",
+      "request": "{\"title\": \"Fix login\", \"board_id\": \"62566392-0ec2-48cc-93a3-cb9588dbeac5\", \"user_id\": \"1e250a18-aa64-4dc2-8eae-24cc0fcee358\"}",
+      "python": "ProjectBoardService().add_task('{\"title\": \"Fix login\", \"board_id\": \"62566392-0ec2-48cc-93a3-cb9588dbeac5\", \"user_id\": \"1e250a18-aa64-4dc2-8eae-24cc0fcee358\"}')",
+      "stopped_at": "rules",
+      "stages": [
+        {
+          "key": "parse",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/boards.py",
+            "line": 65,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/boards.py#L65",
+            "code": "data = parse_request(request)"
+          }
+        },
+        {
+          "key": "check",
+          "status": "passed",
+          "source": {
+            "file": "planner/services/boards.py",
+            "line": 66,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/boards.py#L66",
+            "code": "title = text_field(data, \"title\", max_length=limits.NAME_MAX_LENGTH)"
+          }
+        },
+        {
+          "key": "rules",
+          "status": "failed",
+          "source": {
+            "file": "planner/services/boards.py",
+            "line": 74,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/boards.py#L74",
+            "code": "with transaction.atomic():"
+          }
+        },
+        {
+          "key": "save",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/boards.py",
+            "line": 81,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/boards.py#L81",
+            "code": "task = Task.objects.create(board=board, title=title, description=description or \"\", assignee=assignee)"
+          }
+        },
+        {
+          "key": "reply",
+          "status": "skipped",
+          "source": {
+            "file": "planner/services/boards.py",
+            "line": 82,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/boards.py#L82",
+            "code": "return to_json({\"id\": str(task.id)})"
+          }
+        }
+      ],
+      "events": [
+        {
+          "helper": "parse_request",
+          "ok": true,
+          "keys": [
+            "title",
+            "board_id",
+            "user_id"
+          ]
+        },
+        {
+          "helper": "text_field",
+          "field": "title",
+          "present": true,
+          "limit": 64,
+          "ok": true,
+          "length": 9
+        },
+        {
+          "helper": "text_field",
+          "field": "description",
+          "present": false,
+          "limit": 128,
+          "ok": true,
+          "absent": true
+        },
+        {
+          "helper": "id_field",
+          "field": "board_id",
+          "present": true,
+          "ok": true,
+          "length": 36
+        },
+        {
+          "helper": "id_field",
+          "field": "user_id",
+          "present": true,
+          "ok": true,
+          "length": 36
+        },
+        {
+          "helper": "get_by_id",
+          "label": "Board",
+          "ok": true,
+          "found": [
+            "Sprint 0"
+          ]
+        },
+        {
+          "helper": "get_by_id",
+          "label": "User",
+          "ok": true,
+          "found": [
+            "bob"
+          ]
+        }
+      ],
+      "sql": [
+        {
+          "sql": "BEGIN IMMEDIATE",
+          "kind": "transaction"
+        },
+        {
+          "sql": "SELECT \"planner_board\".\"id\", \"planner_board\".\"creation_time\", \"planner_board\".\"team_id\", \"planner_board\".\"name\", \"planner_board\".\"description\", \"planner_board\".\"status\", \"planner_board\".\"end_time\" FROM \"planner_board\" WHERE \"planner_board\".\"id\" = '625663920ec248cc93a3cb9588dbeac5' ORDER BY \"planner_board\".\"id\" ASC LIMIT 1",
+          "kind": "read"
+        },
+        {
+          "sql": "SELECT \"planner_user\".\"id\", \"planner_user\".\"creation_time\", \"planner_user\".\"name\", \"planner_user\".\"display_name\" FROM \"planner_user\" WHERE \"planner_user\".\"id\" = '1e250a18aa644dc28eae24cc0fcee358' ORDER BY \"planner_user\".\"id\" ASC LIMIT 1",
+          "kind": "read"
+        },
+        {
+          "sql": "ROLLBACK",
+          "kind": "transaction"
+        }
+      ],
+      "outcome": {
+        "kind": "error",
+        "exception": "InvalidStateError",
+        "builtin": null,
+        "code": "invalid_state",
+        "http": 409,
+        "message": "Tasks can only be added to an OPEN board; 'Sprint 0' is closed.",
+        "raised_at": {
+          "file": "planner/services/boards.py",
+          "line": 78,
+          "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/boards.py#L78",
+          "code": "if board.status != BoardStatus.OPEN:\n    raise InvalidStateError(f\"Tasks can only be added to an OPEN board; '{board.name}' is closed.\")",
+          "function": "add_task"
+        }
+      },
+      "rows_before": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "rows_after": {
+        "User": 3,
+        "Team": 1,
+        "TeamMembership": 2,
+        "Board": 1,
+        "Task": 1
+      },
+      "changed": false
+    }
+  ]
+}

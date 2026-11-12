@@ -1,0 +1,235 @@
+{
+  "meta": {
+    "tests": {
+      "count": 196,
+      "passed": true
+    },
+    "repo": "https://github.com/Aryan7512/team-project-planner",
+    "commit": "4a2edcd6327ab1614493fd38c4b74d75dfacbf0b",
+    "commit_url": "https://github.com/Aryan7512/team-project-planner/commit/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b",
+    "captured_at": "2026-11-12T16:18:13Z",
+    "python": "3.14.7",
+    "django": "5.2.19"
+  },
+  "classes": [
+    {
+      "base": "UserBase",
+      "implementation": "UserService",
+      "file": "user_base.py",
+      "methods": [
+        {
+          "name": "create_user",
+          "signature": "create_user(self, request: str) -> str",
+          "kind": "write",
+          "source": {
+            "file": "user_base.py",
+            "line": 7,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L7",
+            "code": "def create_user(self, request: str) -> str:"
+          }
+        },
+        {
+          "name": "list_users",
+          "signature": "list_users(self) -> str",
+          "kind": "read",
+          "source": {
+            "file": "user_base.py",
+            "line": 24,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L24",
+            "code": "def list_users(self) -> str:"
+          }
+        },
+        {
+          "name": "describe_user",
+          "signature": "describe_user(self, request: str) -> str",
+          "kind": "read",
+          "source": {
+            "file": "user_base.py",
+            "line": 38,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L38",
+            "code": "def describe_user(self, request: str) -> str:"
+          }
+        },
+        {
+          "name": "update_user",
+          "signature": "update_user(self, request: str) -> str",
+          "kind": "write",
+          "source": {
+            "file": "user_base.py",
+            "line": 57,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L57",
+            "code": "def update_user(self, request: str) -> str:"
+          }
+        },
+        {
+          "name": "get_user_teams",
+          "signature": "get_user_teams(self, request: str) -> str",
+          "kind": "read",
+          "source": {
+            "file": "user_base.py",
+            "line": 77,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L77",
+            "code": "def get_user_teams(self, request: str) -> str:"
+          }
+        }
+      ]
+    },
+    {
+      "base": "TeamBase",
+      "implementation": "TeamService",
+      "file": "team_base.py",
+      "methods": [
+        {
+          "name": "create_team",
+          "signature": "create_team(self, request: str) -> str",
+          "kind": "write",
+          "source": {
+            "file": "team_base.py",
+            "line": 9,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/team_base.py#L9",
+            "code": "def create_team(self, request: str) -> str:"
+          }
+        },
+        {
+          "name": "list_teams",
+          "signature": "list_teams(self) -> str",
+          "kind": "read",
+          "source": {
+            "file": "team_base.py",
+            "line": 27,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/team_base.py#L27",
+            "code": "def list_teams(self) -> str:"
+          }
+        },
+        {
+          "name": "describe_team",
+          "signature": "describe_team(self, request: str) -> str",
+          "kind": "read",
+          "source": {
+            "file": "team_base.py",
+            "line": 42,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/team_base.py#L42",
+            "code": "def describe_team(self, request: str) -> str:"
+          }
+        },
+        {
+          "name": "update_team",
+          "signature": "update_team(self, request: str) -> str",
+          "kind": "write",
+          "source": {
+            "file": "team_base.py",
+            "line": 62,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/team_base.py#L62",
+            "code": "def update_team(self, request: str) -> str:"
+          }
+        },
+        {
+          "name": "add_users_to_team",
+          "signature": "add_users_to_team(self, request: str)",
+          "kind": "write",
+          "source": {
+            "file": "team_base.py",
+            "line": 84,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/team_base.py#L84",
+            "code": "def add_users_to_team(self, request: str):"
+          }
+        },
+        {
+          "name": "remove_users_from_team",
+          "signature": "remove_users_from_team(self, request: str)",
+          "kind": "write",
+          "source": {
+            "file": "team_base.py",
+            "line": 100,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/team_base.py#L100",
+            "code": "def remove_users_from_team(self, request: str):"
+          }
+        },
+        {
+          "name": "list_team_users",
+          "signature": "list_team_users(self, request: str)",
+          "kind": "read",
+          "source": {
+            "file": "team_base.py",
+            "line": 116,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/team_base.py#L116",
+            "code": "def list_team_users(self, request: str):"
+          }
+        }
+      ]
+    },
+    {
+      "base": "ProjectBoardBase",
+      "implementation": "ProjectBoardService",
+      "file": "project_board_base.py",
+      "methods": [
+        {
+          "name": "create_board",
+          "signature": "create_board(self, request: str)",
+          "kind": "write",
+          "source": {
+            "file": "project_board_base.py",
+            "line": 7,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L7",
+            "code": "def create_board(self, request: str):"
+          }
+        },
+        {
+          "name": "close_board",
+          "signature": "close_board(self, request: str) -> str",
+          "kind": "write",
+          "source": {
+            "file": "project_board_base.py",
+            "line": 26,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L26",
+            "code": "def close_board(self, request: str) -> str:"
+          }
+        },
+        {
+          "name": "add_task",
+          "signature": "add_task(self, request: str) -> str",
+          "kind": "write",
+          "source": {
+            "file": "project_board_base.py",
+            "line": 42,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L42",
+            "code": "def add_task(self, request: str) -> str:"
+          }
+        },
+        {
+          "name": "update_task_status",
+          "signature": "update_task_status(self, request: str)",
+          "kind": "write",
+          "source": {
+            "file": "project_board_base.py",
+            "line": 64,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L64",
+            "code": "def update_task_status(self, request: str):"
+          }
+        },
+        {
+          "name": "list_boards",
+          "signature": "list_boards(self, request: str) -> str",
+          "kind": "read",
+          "source": {
+            "file": "project_board_base.py",
+            "line": 75,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L75",
+            "code": "def list_boards(self, request: str) -> str:"
+          }
+        },
+        {
+          "name": "export_board",
+          "signature": "export_board(self, request: str) -> str",
+          "kind": "export",
+          "source": {
+            "file": "project_board_base.py",
+            "line": 92,
+            "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L92",
+            "code": "def export_board(self, request: str) -> str:"
+          }
+        }
+      ]
+    }
+  ]
+}

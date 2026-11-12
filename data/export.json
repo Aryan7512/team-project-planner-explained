@@ -1,0 +1,48 @@
+{
+  "out_file": "core_sprint-2_20261112T161723Z.txt",
+  "second_out_file": "core_sprint-2_20261112T161723Z-2.txt",
+  "text": "════════════════════════════════════════════════════════════════════════\n  Sprint 2\n  OPEN  ·  running for less than a minute\n════════════════════════════════════════════════════════════════════════\n\n  Team          core\n  Team admin    Alice Smith (alice)\n  Description   Teams and boards over HTTP\n  Created       2026-11-12 16:17 UTC\n  Closed        —\n\n  Progress      [████████░░░░░░░░░░░░]  40%  ·  2 of 5 complete\n  Tasks         2 open  ·  1 in progress  ·  2 complete\n\n────────────────────────────────────────────────────────────────────────\n  OPEN  ·  2\n────────────────────────────────────────────────────────────────────────\n  [ ] Document the API\n      Assigned to Carol Diaz (carol)  ·  added 2026-11-12 16:17 UTC\n\n  [ ] Check the 50-member cap under load\n      Six processes at once.\n      Assigned to Bob Lee (bob)  ·  added 2026-11-12 16:17 UTC\n\n────────────────────────────────────────────────────────────────────────\n  IN PROGRESS  ·  1\n────────────────────────────────────────────────────────────────────────\n  [~] Map errors to status codes\n      400, 404 and 409, with a JSON body.\n      Assigned to 王伟 (wei)  ·  added 2026-11-12 16:17 UTC\n\n────────────────────────────────────────────────────────────────────────\n  COMPLETE  ·  2\n────────────────────────────────────────────────────────────────────────\n  [x] Add the web endpoints\n      Every API method at /api/<group>/<method>.\n      Assigned to Alice Smith (alice)  ·  added 2026-11-12 16:17 UTC\n\n  [x] Write the HTTP tests\n      Assigned to Bob Lee (bob)  ·  added 2026-11-12 16:17 UTC\n\n────────────────────────────────────────────────────────────────────────\n  WHO IS WORKING ON WHAT\n────────────────────────────────────────────────────────────────────────\n  Bob Lee (bob)          2 tasks  ·  1 complete\n  Alice Smith (alice)     1 task  ·  1 complete\n  Carol Diaz (carol)      1 task  ·  0 complete\n  王伟 (wei)              1 task  ·  0 complete\n\n════════════════════════════════════════════════════════════════════════\n  Exported 2026-11-12 16:17 UTC by Team Project Planner\n  Board id 8caecf73-3fa7-4f41-a148-9a9b50c6083f\n════════════════════════════════════════════════════════════════════════\n",
+  "bytes": 3969,
+  "parts": [
+    {
+      "title": "Header",
+      "text": "The board's name, its status and how long it has been running.",
+      "start": 0,
+      "end": 3
+    },
+    {
+      "title": "Details",
+      "text": "Who owns the board and when it was created and closed.",
+      "start": 5,
+      "end": 9
+    },
+    {
+      "title": "Progress",
+      "text": "Rounded down, so the bar is only full when every task is complete.",
+      "start": 11,
+      "end": 12
+    },
+    {
+      "title": "Columns",
+      "text": "One section per status, in the order work moves across a board.",
+      "start": 14,
+      "end": 39
+    },
+    {
+      "title": "Workload",
+      "text": "How many tasks each person has, and how many of those are complete.",
+      "start": 41,
+      "end": 47
+    },
+    {
+      "title": "Footer",
+      "text": "When the file was made, and the board's id.",
+      "start": 49,
+      "end": 52
+    }
+  ],
+  "cleaned": {
+    "description": "400, 404 and 409,\nwith a JSON body.",
+    "shown": "400, 404 and 409, with a JSON body."
+  }
+}

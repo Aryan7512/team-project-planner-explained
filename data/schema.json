@@ -1,0 +1,306 @@
+{
+  "tables": [
+    {
+      "model": "User",
+      "table": "planner_user",
+      "fields": [
+        {
+          "name": "id",
+          "pk": true,
+          "unique": false,
+          "null": false,
+          "type": "uuid"
+        },
+        {
+          "name": "creation_time",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "date and time"
+        },
+        {
+          "name": "name",
+          "pk": false,
+          "unique": true,
+          "null": false,
+          "type": "text, up to 64"
+        },
+        {
+          "name": "display_name",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "text, up to 128"
+        }
+      ],
+      "constraints": [],
+      "create_sql": "CREATE TABLE \"planner_user\" (\"id\" char(32) NOT NULL PRIMARY KEY, \"creation_time\" datetime NOT NULL, \"name\" varchar(64) NOT NULL UNIQUE, \"display_name\" varchar(128) NOT NULL)"
+    },
+    {
+      "model": "Team",
+      "table": "planner_team",
+      "fields": [
+        {
+          "name": "id",
+          "pk": true,
+          "unique": false,
+          "null": false,
+          "type": "uuid"
+        },
+        {
+          "name": "creation_time",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "date and time"
+        },
+        {
+          "name": "name",
+          "pk": false,
+          "unique": true,
+          "null": false,
+          "type": "text, up to 64"
+        },
+        {
+          "name": "description",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "text, up to 128"
+        },
+        {
+          "name": "admin_id",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "uuid",
+          "references": "User",
+          "on_delete": "PROTECT"
+        }
+      ],
+      "constraints": [],
+      "create_sql": "CREATE TABLE \"planner_team\" (\"id\" char(32) NOT NULL PRIMARY KEY, \"creation_time\" datetime NOT NULL, \"name\" varchar(64) NOT NULL UNIQUE, \"description\" varchar(128) NOT NULL, \"admin_id\" char(32) NOT NULL REFERENCES \"planner_user\" (\"id\") DEFERRABLE INITIALLY DEFERRED)"
+    },
+    {
+      "model": "TeamMembership",
+      "table": "planner_teammembership",
+      "fields": [
+        {
+          "name": "id",
+          "pk": true,
+          "unique": false,
+          "null": false,
+          "type": "uuid"
+        },
+        {
+          "name": "creation_time",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "date and time"
+        },
+        {
+          "name": "team_id",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "uuid",
+          "references": "Team",
+          "on_delete": "CASCADE"
+        },
+        {
+          "name": "user_id",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "uuid",
+          "references": "User",
+          "on_delete": "CASCADE"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "unique",
+          "name": "unique_team_member",
+          "fields": [
+            "team",
+            "user"
+          ]
+        }
+      ],
+      "create_sql": "CREATE TABLE \"planner_teammembership\" (\"id\" char(32) NOT NULL PRIMARY KEY, \"creation_time\" datetime NOT NULL, \"team_id\" char(32) NOT NULL REFERENCES \"planner_team\" (\"id\") DEFERRABLE INITIALLY DEFERRED, \"user_id\" char(32) NOT NULL REFERENCES \"planner_user\" (\"id\") DEFERRABLE INITIALLY DEFERRED, CONSTRAINT \"unique_team_member\" UNIQUE (\"team_id\", \"user_id\"))"
+    },
+    {
+      "model": "Board",
+      "table": "planner_board",
+      "fields": [
+        {
+          "name": "id",
+          "pk": true,
+          "unique": false,
+          "null": false,
+          "type": "uuid"
+        },
+        {
+          "name": "creation_time",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "date and time"
+        },
+        {
+          "name": "team_id",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "uuid",
+          "references": "Team",
+          "on_delete": "CASCADE"
+        },
+        {
+          "name": "name",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "text, up to 64"
+        },
+        {
+          "name": "description",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "text, up to 128"
+        },
+        {
+          "name": "status",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "text, up to 16",
+          "choices": [
+            "OPEN",
+            "CLOSED"
+          ]
+        },
+        {
+          "name": "end_time",
+          "pk": false,
+          "unique": false,
+          "null": true,
+          "type": "date and time"
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "unique",
+          "name": "unique_board_name_per_team",
+          "fields": [
+            "team",
+            "name"
+          ]
+        },
+        {
+          "kind": "check",
+          "name": "board_status_matches_end_time",
+          "sql": "(((\"end_time\" IS NULL AND \"status\" = 'OPEN') OR (\"end_time\" IS NOT NULL AND \"status\" = 'CLOSED')))"
+        }
+      ],
+      "create_sql": "CREATE TABLE \"planner_board\" (\"id\" char(32) NOT NULL PRIMARY KEY, \"creation_time\" datetime NOT NULL, \"name\" varchar(64) NOT NULL, \"description\" varchar(128) NOT NULL, \"status\" varchar(16) NOT NULL, \"end_time\" datetime NULL, \"team_id\" char(32) NOT NULL REFERENCES \"planner_team\" (\"id\") DEFERRABLE INITIALLY DEFERRED, CONSTRAINT \"unique_board_name_per_team\" UNIQUE (\"team_id\", \"name\"), CONSTRAINT \"board_status_matches_end_time\" CHECK (((\"end_time\" IS NULL AND \"status\" = 'OPEN') OR (\"end_time\" IS NOT NULL AND \"status\" = 'CLOSED'))))"
+    },
+    {
+      "model": "Task",
+      "table": "planner_task",
+      "fields": [
+        {
+          "name": "id",
+          "pk": true,
+          "unique": false,
+          "null": false,
+          "type": "uuid"
+        },
+        {
+          "name": "creation_time",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "date and time"
+        },
+        {
+          "name": "board_id",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "uuid",
+          "references": "Board",
+          "on_delete": "CASCADE"
+        },
+        {
+          "name": "title",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "text, up to 64"
+        },
+        {
+          "name": "description",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "text, up to 128"
+        },
+        {
+          "name": "assignee_id",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "uuid",
+          "references": "User",
+          "on_delete": "PROTECT"
+        },
+        {
+          "name": "status",
+          "pk": false,
+          "unique": false,
+          "null": false,
+          "type": "text, up to 16",
+          "choices": [
+            "OPEN",
+            "IN_PROGRESS",
+            "COMPLETE"
+          ]
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "unique",
+          "name": "unique_task_title_per_board",
+          "fields": [
+            "board",
+            "title"
+          ]
+        },
+        {
+          "kind": "check",
+          "name": "task_status_valid",
+          "sql": "(\"status\" IN ('OPEN', 'IN_PROGRESS', 'COMPLETE'))"
+        }
+      ],
+      "create_sql": "CREATE TABLE \"planner_task\" (\"id\" char(32) NOT NULL PRIMARY KEY, \"creation_time\" datetime NOT NULL, \"title\" varchar(64) NOT NULL, \"description\" varchar(128) NOT NULL, \"status\" varchar(16) NOT NULL, \"board_id\" char(32) NOT NULL REFERENCES \"planner_board\" (\"id\") DEFERRABLE INITIALLY DEFERRED, \"assignee_id\" char(32) NOT NULL REFERENCES \"planner_user\" (\"id\") DEFERRABLE INITIALLY DEFERRED, CONSTRAINT \"unique_task_title_per_board\" UNIQUE (\"board_id\", \"title\"), CONSTRAINT \"task_status_valid\" CHECK (\"status\" IN ('OPEN', 'IN_PROGRESS', 'COMPLETE')))"
+    }
+  ],
+  "index_count": 16,
+  "other_tables": [
+    "django_migrations",
+    "sqlite_sequence"
+  ],
+  "db_files": [
+    "planner.sqlite3"
+  ],
+  "db_file": "db/planner.sqlite3",
+  "settings": {
+    "file": "planner_project/settings.py",
+    "line": 50,
+    "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner_project/settings.py#L50",
+    "code": "\"NAME\": DB_DIR / \"planner.sqlite3\","
+  }
+}

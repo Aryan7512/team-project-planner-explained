@@ -1,0 +1,203 @@
+{
+  "tests": 196,
+  "per_module": {
+    "test_boards": 32,
+    "test_export": 16,
+    "test_models": 15,
+    "test_performance": 3,
+    "test_teams": 48,
+    "test_users": 30,
+    "test_web": 15,
+    "test_interfaces": 2,
+    "test_plain_script": 1,
+    "test_validators": 34
+  },
+  "mutations": [
+    {
+      "title": "The fifty-member cap is off by one",
+      "file": "planner/services/teams.py",
+      "line": 91,
+      "before": "if current_size + len(new_members) > limits.TEAM_MAX_MEMBERS:",
+      "after": "if current_size + len(new_members) >= limits.TEAM_MAX_MEMBERS:",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/teams.py#L91",
+      "failing_tests": 6,
+      "caught": true
+    },
+    {
+      "title": "Existing members are added again",
+      "file": "planner/services/teams.py",
+      "line": 89,
+      "before": "new_members = [user for user in users if user.pk not in already_members]",
+      "after": "new_members = [user for user in users ]",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/teams.py#L89",
+      "failing_tests": 2,
+      "caught": true
+    },
+    {
+      "title": "A new display name may be 128 characters",
+      "file": "planner/services/users.py",
+      "line": 25,
+      "before": "display_name = text_field(data, \"display_name\", max_length=limits.DISPLAY_NAME_CREATE_MAX_LENGTH)",
+      "after": "display_name = text_field(data, \"display_name\", max_length=limits.DISPLAY_NAME_UPDATE_MAX_LENGTH)",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L25",
+      "failing_tests": 1,
+      "caught": true
+    },
+    {
+      "title": "A user's name can be changed",
+      "file": "planner/services/users.py",
+      "line": 56,
+      "before": "if name is not None and name != user.name:\n    raise InvalidInputError(\"User name cannot be updated.\")",
+      "after": "if False:\n    raise InvalidInputError(\"User name cannot be updated.\")",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/users.py#L56",
+      "failing_tests": 1,
+      "caught": true
+    },
+    {
+      "title": "Surrounding whitespace is kept",
+      "file": "planner/validators.py",
+      "line": 53,
+      "before": "return value.strip()",
+      "after": "return value",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/validators.py#L53",
+      "failing_tests": 12,
+      "caught": true
+    },
+    {
+      "title": "The same id in two spellings counts twice",
+      "file": "planner/lookups.py",
+      "line": 50,
+      "before": "return list(records.values())",
+      "after": "return [found[pk] for pk in parsed.values()]",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/lookups.py#L50",
+      "failing_tests": 1,
+      "caught": true
+    },
+    {
+      "title": "A board closes with unfinished tasks",
+      "file": "planner/services/boards.py",
+      "line": 54,
+      "before": "if unfinished:\n    raise InvalidStateError(",
+      "after": "if False:\n    raise InvalidStateError(",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/boards.py#L54",
+      "failing_tests": 2,
+      "caught": true
+    },
+    {
+      "title": "Tasks can be added to a closed board",
+      "file": "planner/services/boards.py",
+      "line": 77,
+      "before": "if board.status != BoardStatus.OPEN:\n    raise InvalidStateError(f\"Tasks can only be added to an OPEN board; '{board.name}' is closed.\")",
+      "after": "if False:\n    raise InvalidStateError(f\"Tasks can only be added to an OPEN board; '{board.name}' is closed.\")",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/boards.py#L77",
+      "failing_tests": 1,
+      "caught": true
+    },
+    {
+      "title": "list_boards includes closed boards",
+      "file": "planner/services/boards.py",
+      "line": 103,
+      "before": "boards = team.boards.filter(status=BoardStatus.OPEN).order_by(\"creation_time\", \"name\")",
+      "after": "boards = team.boards.all().order_by(\"creation_time\", \"name\")",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/services/boards.py#L103",
+      "failing_tests": 2,
+      "caught": true
+    },
+    {
+      "title": "An export can overwrite an older one",
+      "file": "planner/export.py",
+      "line": 53,
+      "before": "with open(out_dir / name, \"x\", encoding=\"utf-8\", newline=\"\\n\") as handle:",
+      "after": "with open(out_dir / name, \"w\", encoding=\"utf-8\", newline=\"\\n\") as handle:",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/export.py#L53",
+      "failing_tests": 2,
+      "caught": true
+    },
+    {
+      "title": "Control characters reach the export",
+      "file": "planner/export.py",
+      "line": 162,
+      "before": "without_controls = \"\".join(\" \" if unicodedata.category(char) == \"Cc\" else char for char in text)",
+      "after": "without_controls = \"\".join(char for char in text)",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/export.py#L162",
+      "failing_tests": 2,
+      "caught": true
+    },
+    {
+      "title": "Progress is rounded up",
+      "file": "planner/export.py",
+      "line": 88,
+      "before": "percent = complete * 100 // total",
+      "after": "percent = round(complete * 100 / total)",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/export.py#L88",
+      "failing_tests": 1,
+      "caught": true
+    },
+    {
+      "title": "A duplicate name answers HTTP 400",
+      "file": "planner/views.py",
+      "line": 37,
+      "before": "(DuplicateError, 409),",
+      "after": "(DuplicateError, 400),",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/views.py#L37",
+      "failing_tests": 1,
+      "caught": true
+    },
+    {
+      "title": "Any content type is accepted",
+      "file": "planner/views.py",
+      "line": 106,
+      "before": "if request.content_type != \"application/json\":",
+      "after": "if False:",
+      "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner/views.py#L106",
+      "failing_tests": 3,
+      "caught": true
+    }
+  ],
+  "query_counts": [
+    {
+      "api": "list_users",
+      "size": "116 users",
+      "queries": 1
+    },
+    {
+      "api": "list_teams",
+      "size": "5 teams",
+      "queries": 1
+    },
+    {
+      "api": "list_team_users",
+      "size": "50 members",
+      "queries": 2
+    },
+    {
+      "api": "get_user_teams",
+      "size": "a member of 2 teams",
+      "queries": 2
+    },
+    {
+      "api": "add_users_to_team",
+      "size": "1 user",
+      "queries": 7
+    },
+    {
+      "api": "add_users_to_team",
+      "size": "50 users",
+      "queries": 7
+    },
+    {
+      "api": "export_board",
+      "size": "1 task",
+      "queries": 2
+    },
+    {
+      "api": "export_board",
+      "size": "40 tasks",
+      "queries": 2
+    }
+  ],
+  "ci_python": [
+    "3.10",
+    "3.14"
+  ]
+}

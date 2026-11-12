@@ -1,0 +1,258 @@
+{
+  "intro": "The docstrings leave some behaviour open. Each choice below follows the spec literally where it is clear, adds rather than removes, and adds no restriction the spec does not state.",
+  "groups": [
+    {
+      "title": "Requests and responses",
+      "decisions": [
+        {
+          "decision": "Responses contain every key the docstring shows, plus `id` and other useful fields; nothing is renamed or dropped.",
+          "why": "Callers can rely on the documented shape and still refer back to records.",
+          "evidence": []
+        },
+        {
+          "decision": "Methods whose `:return:` is blank return `{}`.",
+          "why": "The spec says output is JSON, so there is always valid JSON to parse.",
+          "evidence": [
+            {
+              "file": "user_base.py",
+              "line": 68,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L68",
+              "code": ":return:",
+              "quote": ":return:"
+            }
+          ]
+        },
+        {
+          "decision": "IDs are random UUID strings. An id that matches no record, including a malformed one, raises `NotFoundError`.",
+          "why": "Opaque, unguessable ids; a malformed id can never match.",
+          "evidence": []
+        },
+        {
+          "decision": "Times are ISO 8601 in UTC, e.g. `2026-11-12T14:05:09Z`.",
+          "why": "Unambiguous and sortable in any time zone.",
+          "evidence": []
+        },
+        {
+          "decision": "Lists are oldest first (team members: in the order they were added); ties are broken by name.",
+          "why": "A stable, predictable order.",
+          "evidence": []
+        },
+        {
+          "decision": "Surrounding whitespace is trimmed; names and titles must not be empty; descriptions are optional and may be empty. Wrong types, `null` and non-object JSON are rejected.",
+          "why": "Matches Django form behaviour and stops `\"alice \"` becoming a second Alice.",
+          "evidence": []
+        },
+        {
+          "decision": "Uniqueness is exact and case-sensitive.",
+          "why": "The spec gives no other rule.",
+          "evidence": []
+        },
+        {
+          "decision": "Updates are partial: only the fields sent change, and at least one field must be sent.",
+          "why": "A typo such as `display_nme` is reported instead of silently changing nothing.",
+          "evidence": []
+        },
+        {
+          "decision": "Unknown request keys are ignored.",
+          "why": "Same treatment as `creation_time`; clients may send extra data.",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "title": "Users",
+      "decisions": [
+        {
+          "decision": "Display name: at most 64 characters on create, 128 on update.",
+          "why": "Each docstring states its own limit.",
+          "evidence": [
+            {
+              "file": "user_base.py",
+              "line": 19,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L19",
+              "code": "* display name can be max 64 characters",
+              "quote": "* display name can be max 64 characters"
+            },
+            {
+              "file": "user_base.py",
+              "line": 73,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L73",
+              "code": "* display name can be max 128 characters",
+              "quote": "* display name can be max 128 characters"
+            }
+          ]
+        },
+        {
+          "decision": "`update_user` accepts `name` only if it is unchanged.",
+          "why": "The request format includes `name`, but \"user name cannot be updated\".",
+          "evidence": [
+            {
+              "file": "user_base.py",
+              "line": 71,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L71",
+              "code": "* user name cannot be updated",
+              "quote": "* user name cannot be updated"
+            }
+          ]
+        },
+        {
+          "decision": "`describe_user` returns `description` (the display name, since users have no description) and also `display_name`.",
+          "why": "Keeps the documented key and adds the real field.",
+          "evidence": [
+            {
+              "file": "user_base.py",
+              "line": 49,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/user_base.py#L49",
+              "code": "\"description\" : \"<some description>\",",
+              "quote": "\"description\" : \"<some description>\","
+            }
+          ]
+        },
+        {
+          "decision": "`get_user_teams` lists the teams the user is a member of.",
+          "why": "Membership is what links users to teams; see the admin rule below.",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "title": "Teams",
+      "decisions": [
+        {
+          "decision": "The admin must be an existing user. Being admin does not make them a member or use one of the 50 places.",
+          "why": "The spec keeps the admin field and membership separate; linking them would be a new rule.",
+          "evidence": [
+            {
+              "file": "team_base.py",
+              "line": 15,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/team_base.py#L15",
+              "code": "\"admin\": \"<id of a user>\"",
+              "quote": "\"admin\": \"<id of a user>\""
+            }
+          ]
+        },
+        {
+          "decision": "A team has at most 50 members, and an add or remove request lists at most 50 ids (an empty list is rejected).",
+          "why": "A per-request cap alone would let a team grow without limit.",
+          "evidence": [
+            {
+              "file": "team_base.py",
+              "line": 95,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/team_base.py#L95",
+              "code": "* Cap the max users that can be added to 50",
+              "quote": "* Cap the max users that can be added to 50"
+            }
+          ]
+        },
+        {
+          "decision": "Adding an existing member or removing a non-member is skipped. An unknown user id fails the whole request.",
+          "why": "Repeating a membership change is harmless; an unknown id is a real mistake.",
+          "evidence": []
+        },
+        {
+          "decision": "The same id sent twice counts once.",
+          "why": "It names the same user.",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "title": "Boards and tasks",
+      "decisions": [
+        {
+          "decision": "`add_task` needs a `board_id`.",
+          "why": "The docstring has no board field, but a task cannot exist without a board.",
+          "evidence": [
+            {
+              "file": "project_board_base.py",
+              "line": 44,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L44",
+              "code": ":param request: A json string with the task details. Task is assigned to a user_id who works on the task",
+              "quote": ":param request: A json string with the task details. Task is assigned to a user_id who works on the task"
+            }
+          ]
+        },
+        {
+          "decision": "In `add_task`, `title` is the task title and `user_id` is the assignee.",
+          "why": "The docstring's placeholders (`<board_name>`, `<team id>`) contradict its own text: \"assigned to a user_id who works on the task\".",
+          "evidence": [
+            {
+              "file": "project_board_base.py",
+              "line": 46,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L46",
+              "code": "\"title\" : \"<board_name>\",",
+              "quote": "\"title\" : \"<board_name>\","
+            },
+            {
+              "file": "project_board_base.py",
+              "line": 48,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L48",
+              "code": "\"user_id\" : \"<team id>\"",
+              "quote": "\"user_id\" : \"<team id>\""
+            }
+          ]
+        },
+        {
+          "decision": "A `creation_time` sent in `create_board` or `add_task` is ignored; the server records the time.",
+          "why": "Timestamps stay trustworthy and cannot be backdated.",
+          "evidence": [
+            {
+              "file": "project_board_base.py",
+              "line": 14,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L14",
+              "code": "\"creation_time\" : \"<date:time when board was created>\"",
+              "quote": "\"creation_time\" : \"<date:time when board was created>\""
+            }
+          ]
+        },
+        {
+          "decision": "The assignee can be any existing user, not only a team member.",
+          "why": "The spec does not require membership.",
+          "evidence": []
+        },
+        {
+          "decision": "A task can move between OPEN, IN_PROGRESS and COMPLETE in any direction while its board is open. Tasks on a closed board are frozen.",
+          "why": "No workflow is specified. Reopening a task would break the rule that closed boards are all COMPLETE.",
+          "evidence": []
+        },
+        {
+          "decision": "A board with no tasks can be closed. Closing an already closed board is an error and keeps the original `end_time`.",
+          "why": "No tasks means none are incomplete; the first end time is the real one.",
+          "evidence": [
+            {
+              "file": "project_board_base.py",
+              "line": 37,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L37",
+              "code": "* You can only close boards with all tasks marked as COMPLETE",
+              "quote": "* You can only close boards with all tasks marked as COMPLETE"
+            }
+          ]
+        },
+        {
+          "decision": "`list_boards` returns open boards only.",
+          "why": "The method is documented as \"list all open boards for a team\".",
+          "evidence": [
+            {
+              "file": "project_board_base.py",
+              "line": 74,
+              "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/project_board_base.py#L74",
+              "code": "# list all open boards for a team",
+              "quote": "# list all open boards for a team"
+            }
+          ]
+        },
+        {
+          "decision": "A board name stays taken after the board is closed.",
+          "why": "\"Unique for a team\" covers all of the team's boards.",
+          "evidence": []
+        },
+        {
+          "decision": "Exports never overwrite: the file is `<team>_<board>_<UTC time>.txt`, with `-2`, `-3`… on a clash. `out_file` is the file name inside `out/`. Closed boards can be exported.",
+          "why": "Every export is kept, and file names are safe on any system.",
+          "evidence": []
+        }
+      ]
+    }
+  ],
+  "readme_url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/README.md#assumptions"
+}

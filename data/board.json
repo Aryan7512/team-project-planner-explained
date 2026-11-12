@@ -1,0 +1,401 @@
+{
+  "labels": {
+    "6e6849a5-bed3-4305-a830-1a51357ad529": "team core",
+    "1f4d88b9-ec47-4477-8a3b-27a4eecfe38d": "user alice",
+    "1e250a18-aa64-4dc2-8eae-24cc0fcee358": "user bob",
+    "181afcd9-50e2-4b05-aaf2-ea2902824e22": "user carol",
+    "345c2199-660e-431e-899f-ee1d41058cd2": "board Sprint 1",
+    "3de3d808-a268-4b6a-a5a1-4dbafa011da8": "task Design the data model",
+    "363b2429-01e3-403f-bfe3-abe4278b0c80": "task Write the API",
+    "1155664b-d882-4864-bca5-e252d16a9bf4": "task Write the README"
+  },
+  "steps": [
+    {
+      "summary": "Create the board.",
+      "calls": [
+        {
+          "method": "create_board",
+          "request": "{\"name\": \"Sprint 1\", \"description\": \"Ship the planner API\", \"team_id\": \"6e6849a5-bed3-4305-a830-1a51357ad529\"}",
+          "ok": true,
+          "body": "{\"id\": \"345c2199-660e-431e-899f-ee1d41058cd2\"}"
+        }
+      ],
+      "board": {
+        "status": "OPEN",
+        "end_time": null,
+        "tasks": []
+      }
+    },
+    {
+      "summary": "Add three tasks.",
+      "calls": [
+        {
+          "method": "add_task",
+          "request": "{\"title\": \"Design the data model\", \"description\": \"\", \"board_id\": \"345c2199-660e-431e-899f-ee1d41058cd2\", \"user_id\": \"1f4d88b9-ec47-4477-8a3b-27a4eecfe38d\"}",
+          "ok": true,
+          "body": "{\"id\": \"3de3d808-a268-4b6a-a5a1-4dbafa011da8\"}"
+        },
+        {
+          "method": "add_task",
+          "request": "{\"title\": \"Write the API\", \"description\": \"\", \"board_id\": \"345c2199-660e-431e-899f-ee1d41058cd2\", \"user_id\": \"1e250a18-aa64-4dc2-8eae-24cc0fcee358\"}",
+          "ok": true,
+          "body": "{\"id\": \"363b2429-01e3-403f-bfe3-abe4278b0c80\"}"
+        },
+        {
+          "method": "add_task",
+          "request": "{\"title\": \"Write the README\", \"description\": \"\", \"board_id\": \"345c2199-660e-431e-899f-ee1d41058cd2\", \"user_id\": \"181afcd9-50e2-4b05-aaf2-ea2902824e22\"}",
+          "ok": true,
+          "body": "{\"id\": \"1155664b-d882-4864-bca5-e252d16a9bf4\"}"
+        }
+      ],
+      "board": {
+        "status": "OPEN",
+        "end_time": null,
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "OPEN",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "OPEN",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "OPEN",
+            "assignee": "carol"
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Try to close the board.",
+      "calls": [
+        {
+          "method": "close_board",
+          "request": "{\"id\": \"345c2199-660e-431e-899f-ee1d41058cd2\"}",
+          "ok": false,
+          "exception": "InvalidStateError",
+          "code": "invalid_state",
+          "http": 409,
+          "message": "Board 'Sprint 1' cannot be closed: 3 of its tasks are not COMPLETE."
+        }
+      ],
+      "board": {
+        "status": "OPEN",
+        "end_time": null,
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "OPEN",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "OPEN",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "OPEN",
+            "assignee": "carol"
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Start two tasks.",
+      "calls": [
+        {
+          "method": "update_task_status",
+          "request": "{\"id\": \"3de3d808-a268-4b6a-a5a1-4dbafa011da8\", \"status\": \"IN_PROGRESS\"}",
+          "ok": true,
+          "body": "{}"
+        },
+        {
+          "method": "update_task_status",
+          "request": "{\"id\": \"363b2429-01e3-403f-bfe3-abe4278b0c80\", \"status\": \"IN_PROGRESS\"}",
+          "ok": true,
+          "body": "{}"
+        }
+      ],
+      "board": {
+        "status": "OPEN",
+        "end_time": null,
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "IN_PROGRESS",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "IN_PROGRESS",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "OPEN",
+            "assignee": "carol"
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Finish the data model.",
+      "calls": [
+        {
+          "method": "update_task_status",
+          "request": "{\"id\": \"3de3d808-a268-4b6a-a5a1-4dbafa011da8\", \"status\": \"COMPLETE\"}",
+          "ok": true,
+          "body": "{}"
+        }
+      ],
+      "board": {
+        "status": "OPEN",
+        "end_time": null,
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "COMPLETE",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "IN_PROGRESS",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "OPEN",
+            "assignee": "carol"
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Try to close the board again.",
+      "calls": [
+        {
+          "method": "close_board",
+          "request": "{\"id\": \"345c2199-660e-431e-899f-ee1d41058cd2\"}",
+          "ok": false,
+          "exception": "InvalidStateError",
+          "code": "invalid_state",
+          "http": 409,
+          "message": "Board 'Sprint 1' cannot be closed: 2 of its tasks are not COMPLETE."
+        }
+      ],
+      "board": {
+        "status": "OPEN",
+        "end_time": null,
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "COMPLETE",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "IN_PROGRESS",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "OPEN",
+            "assignee": "carol"
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Finish the other two tasks. The README goes straight from OPEN to COMPLETE.",
+      "calls": [
+        {
+          "method": "update_task_status",
+          "request": "{\"id\": \"363b2429-01e3-403f-bfe3-abe4278b0c80\", \"status\": \"COMPLETE\"}",
+          "ok": true,
+          "body": "{}"
+        },
+        {
+          "method": "update_task_status",
+          "request": "{\"id\": \"1155664b-d882-4864-bca5-e252d16a9bf4\", \"status\": \"COMPLETE\"}",
+          "ok": true,
+          "body": "{}"
+        }
+      ],
+      "board": {
+        "status": "OPEN",
+        "end_time": null,
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "COMPLETE",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "COMPLETE",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "COMPLETE",
+            "assignee": "carol"
+          }
+        ]
+      }
+    },
+    {
+      "summary": "List the team's open boards.",
+      "calls": [
+        {
+          "method": "list_boards",
+          "request": "{\"id\": \"6e6849a5-bed3-4305-a830-1a51357ad529\"}",
+          "ok": true,
+          "body": "[{\"id\": \"345c2199-660e-431e-899f-ee1d41058cd2\", \"name\": \"Sprint 1\", \"description\": \"Ship the planner API\", \"team_id\": \"6e6849a5-bed3-4305-a830-1a51357ad529\", \"status\": \"OPEN\", \"creation_time\": \"2026-11-12T16:17:23Z\", \"end_time\": null}]"
+        }
+      ],
+      "board": {
+        "status": "OPEN",
+        "end_time": null,
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "COMPLETE",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "COMPLETE",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "COMPLETE",
+            "assignee": "carol"
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Close the board.",
+      "calls": [
+        {
+          "method": "close_board",
+          "request": "{\"id\": \"345c2199-660e-431e-899f-ee1d41058cd2\"}",
+          "ok": true,
+          "body": "{}"
+        }
+      ],
+      "board": {
+        "status": "CLOSED",
+        "end_time": "2026-11-12T16:17:23Z",
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "COMPLETE",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "COMPLETE",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "COMPLETE",
+            "assignee": "carol"
+          }
+        ]
+      }
+    },
+    {
+      "summary": "List the team's open boards again.",
+      "calls": [
+        {
+          "method": "list_boards",
+          "request": "{\"id\": \"6e6849a5-bed3-4305-a830-1a51357ad529\"}",
+          "ok": true,
+          "body": "[]"
+        }
+      ],
+      "board": {
+        "status": "CLOSED",
+        "end_time": "2026-11-12T16:17:23Z",
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "COMPLETE",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "COMPLETE",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "COMPLETE",
+            "assignee": "carol"
+          }
+        ]
+      }
+    },
+    {
+      "summary": "Try to change the closed board.",
+      "calls": [
+        {
+          "method": "add_task",
+          "request": "{\"title\": \"Hotfix\", \"board_id\": \"345c2199-660e-431e-899f-ee1d41058cd2\", \"user_id\": \"1e250a18-aa64-4dc2-8eae-24cc0fcee358\"}",
+          "ok": false,
+          "exception": "InvalidStateError",
+          "code": "invalid_state",
+          "http": 409,
+          "message": "Tasks can only be added to an OPEN board; 'Sprint 1' is closed."
+        },
+        {
+          "method": "update_task_status",
+          "request": "{\"id\": \"1155664b-d882-4864-bca5-e252d16a9bf4\", \"status\": \"OPEN\"}",
+          "ok": false,
+          "exception": "InvalidStateError",
+          "code": "invalid_state",
+          "http": 409,
+          "message": "Board 'Sprint 1' is closed, so its tasks can no longer change status."
+        },
+        {
+          "method": "close_board",
+          "request": "{\"id\": \"345c2199-660e-431e-899f-ee1d41058cd2\"}",
+          "ok": false,
+          "exception": "InvalidStateError",
+          "code": "invalid_state",
+          "http": 409,
+          "message": "Board 'Sprint 1' is already closed."
+        }
+      ],
+      "board": {
+        "status": "CLOSED",
+        "end_time": "2026-11-12T16:17:23Z",
+        "tasks": [
+          {
+            "title": "Design the data model",
+            "status": "COMPLETE",
+            "assignee": "alice"
+          },
+          {
+            "title": "Write the API",
+            "status": "COMPLETE",
+            "assignee": "bob"
+          },
+          {
+            "title": "Write the README",
+            "status": "COMPLETE",
+            "assignee": "carol"
+          }
+        ]
+      }
+    }
+  ]
+}

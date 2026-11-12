@@ -1,0 +1,293 @@
+{
+  "processes": 6,
+  "batch_size": 30,
+  "limit": 50,
+  "setting": {
+    "file": "planner_project/settings.py",
+    "line": 56,
+    "url": "https://github.com/Aryan7512/team-project-planner/blob/4a2edcd6327ab1614493fd38c4b74d75dfacbf0b/planner_project/settings.py#L56",
+    "code": "# Take the write lock when a transaction starts. Simultaneous writes\n# then wait their turn instead of failing with \"database is locked\",\n# and check-then-write rules (such as the 50-member team cap) always\n# see the latest data, so they fail with the proper planner error.\n\"transaction_mode\": \"IMMEDIATE\","
+  },
+  "modes": [
+    {
+      "mode": "immediate",
+      "rounds": [
+        {
+          "processes": [
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race0' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.00095367431640625,
+              "end_ms": 48.773765563964844
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race0' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.00095367431640625,
+              "end_ms": 130.62572479248047
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race0' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.00095367431640625,
+              "end_ms": 103.09386253356934
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race0' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.3037452697753906,
+              "end_ms": 76.56383514404297
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race0' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.00095367431640625,
+              "end_ms": 28.9459228515625
+            },
+            {
+              "ok": true,
+              "start_ms": 0.03981590270996094,
+              "end_ms": 14.612913131713867
+            }
+          ],
+          "team_size": 30
+        },
+        {
+          "processes": [
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race1' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.008106231689453125,
+              "end_ms": 43.32304000854492
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race1' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.05817413330078125,
+              "end_ms": 96.14992141723633
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race1' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.1571178436279297,
+              "end_ms": 67.36421585083008
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race1' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.007152557373046875,
+              "end_ms": 26.62491798400879
+            },
+            {
+              "ok": true,
+              "start_ms": 0.007152557373046875,
+              "end_ms": 11.716127395629883
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race1' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.00095367431640625,
+              "end_ms": 124.73487854003906
+            }
+          ],
+          "team_size": 30
+        },
+        {
+          "processes": [
+            {
+              "ok": true,
+              "start_ms": 0.010013580322265625,
+              "end_ms": 11.904001235961914
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race2' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.014066696166992188,
+              "end_ms": 68.24588775634766
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race2' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.011920928955078125,
+              "end_ms": 29.89482879638672
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race2' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.015020370483398438,
+              "end_ms": 98.77204895019531
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race2' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.010013580322265625,
+              "end_ms": 125.76580047607422
+            },
+            {
+              "ok": false,
+              "exception": "InvalidStateError",
+              "message": "Team 'race2' can have at most 50 members: it has 30, and this request would add 30 more.",
+              "start_ms": 0.016927719116210938,
+              "end_ms": 45.37177085876465
+            }
+          ],
+          "team_size": 30
+        }
+      ]
+    },
+    {
+      "mode": "deferred",
+      "rounds": [
+        {
+          "processes": [
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.0011920928955078125,
+              "end_ms": 9.060144424438477
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.0011920928955078125,
+              "end_ms": 12.995243072509766
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.0011920928955078125,
+              "end_ms": 11.842012405395508
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.0011920928955078125,
+              "end_ms": 13.871908187866211
+            },
+            {
+              "ok": true,
+              "start_ms": 0.0011920928955078125,
+              "end_ms": 24.378299713134766
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.0011920928955078125,
+              "end_ms": 8.899211883544922
+            }
+          ],
+          "team_size": 30
+        },
+        {
+          "processes": [
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.0069141387939453125,
+              "end_ms": 11.017084121704102
+            },
+            {
+              "ok": true,
+              "start_ms": 0.008106231689453125,
+              "end_ms": 24.643898010253906
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.009059906005859375,
+              "end_ms": 11.284112930297852
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.0011920928955078125,
+              "end_ms": 12.271881103515625
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.009059906005859375,
+              "end_ms": 17.38882064819336
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.008106231689453125,
+              "end_ms": 11.652946472167969
+            }
+          ],
+          "team_size": 30
+        },
+        {
+          "processes": [
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.0050067901611328125,
+              "end_ms": 9.536981582641602
+            },
+            {
+              "ok": true,
+              "start_ms": 0.5500316619873047,
+              "end_ms": 17.380952835083008
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.00095367431640625,
+              "end_ms": 9.961843490600586
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.00095367431640625,
+              "end_ms": 11.506080627441406
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.010967254638671875,
+              "end_ms": 11.919021606445312
+            },
+            {
+              "ok": false,
+              "exception": "OperationalError",
+              "message": "database is locked",
+              "start_ms": 0.00095367431640625,
+              "end_ms": 9.571075439453125
+            }
+          ],
+          "team_size": 30
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "calls": [
+    {
+      "label": "create_user",
+      "method": "POST",
+      "path": "/api/users/create_user",
+      "body": "{\"name\": \"dana\", \"display_name\": \"Dana Kim\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{\"id\": \"b0e6407b-2b89-4c7f-b860-bcedb31967fd\"}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "create_user",
+      "method": "POST",
+      "path": "/api/users/create_user",
+      "body": "{\"name\": \"eve\", \"display_name\": \"Eve Park\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{\"id\": \"224b0643-382e-4f29-9167-2e7deb989d95\"}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "list_users",
+      "method": "GET",
+      "path": "/api/users/list_users",
+      "body": null,
+      "content_type": null,
+      "status": 200,
+      "response": "[{\"id\": \"1f4d88b9-ec47-4477-8a3b-27a4eecfe38d\", \"name\": \"alice\", \"display_name\": \"Alice Smith\", \"creation_time\": \"2026-11-12T16:17:23Z\"}, {\"id\": \"1e250a18-aa64-4dc2-8eae-24cc0fcee358\", \"name\": \"bob\", \"display_name\": \"Bob Lee\", \"creation_time\": \"2026-11-12T16:17:23Z\"}, {\"id\": \"181afcd9-50e2-4b05-aaf2-ea2902824e22\", \"name\": \"carol\", \"display_name\": \"Carol Diaz\", \"creation_time\": \"2026-11-12T16:17:23Z\"}, {\"id\": \"b0e6407b-2b89-4c7f-b860-bcedb31967fd\", \"name\": \"dana\", \"display_name\": \"Dana Kim\", \"creation_time\": \"2026-11-12T16:17:23Z\"}, {\"id\": \"224b0643-382e-4f29-9167-2e7deb989d95\", \"name\": \"eve\", \"display_name\": \"Eve Park\", \"creation_time\": \"2026-11-12T16:17:23Z\"}]",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "describe_user",
+      "method": "POST",
+      "path": "/api/users/describe_user",
+      "body": "{\"id\": \"b0e6407b-2b89-4c7f-b860-bcedb31967fd\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{\"id\": \"b0e6407b-2b89-4c7f-b860-bcedb31967fd\", \"name\": \"dana\", \"display_name\": \"Dana Kim\", \"creation_time\": \"2026-11-12T16:17:23Z\", \"description\": \"Dana Kim\"}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "update_user",
+      "method": "POST",
+      "path": "/api/users/update_user",
+      "body": "{\"id\": \"224b0643-382e-4f29-9167-2e7deb989d95\", \"user\": {\"name\": \"eve\", \"display_name\": \"Eve Park-Lee\"}}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "create_team",
+      "method": "POST",
+      "path": "/api/teams/create_team",
+      "body": "{\"name\": \"mobile\", \"description\": \"Mobile apps\", \"admin\": \"b0e6407b-2b89-4c7f-b860-bcedb31967fd\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\"}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "list_teams",
+      "method": "GET",
+      "path": "/api/teams/list_teams",
+      "body": null,
+      "content_type": null,
+      "status": 200,
+      "response": "[{\"id\": \"6e6849a5-bed3-4305-a830-1a51357ad529\", \"name\": \"core\", \"description\": \"Core platform\", \"creation_time\": \"2026-11-12T16:17:23Z\", \"admin\": \"1f4d88b9-ec47-4477-8a3b-27a4eecfe38d\"}, {\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\", \"name\": \"mobile\", \"description\": \"Mobile apps\", \"creation_time\": \"2026-11-12T16:17:23Z\", \"admin\": \"b0e6407b-2b89-4c7f-b860-bcedb31967fd\"}]",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "describe_team",
+      "method": "POST",
+      "path": "/api/teams/describe_team",
+      "body": "{\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\", \"name\": \"mobile\", \"description\": \"Mobile apps\", \"creation_time\": \"2026-11-12T16:17:23Z\", \"admin\": \"b0e6407b-2b89-4c7f-b860-bcedb31967fd\"}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "update_team",
+      "method": "POST",
+      "path": "/api/teams/update_team",
+      "body": "{\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\", \"team\": {\"description\": \"iOS and Android apps\"}}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "add_users_to_team",
+      "method": "POST",
+      "path": "/api/teams/add_users_to_team",
+      "body": "{\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\", \"users\": [\"b0e6407b-2b89-4c7f-b860-bcedb31967fd\", \"224b0643-382e-4f29-9167-2e7deb989d95\"]}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "remove_users_from_team",
+      "method": "POST",
+      "path": "/api/teams/remove_users_from_team",
+      "body": "{\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\", \"users\": [\"b0e6407b-2b89-4c7f-b860-bcedb31967fd\"]}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "list_team_users",
+      "method": "POST",
+      "path": "/api/teams/list_team_users",
+      "body": "{\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "[{\"id\": \"224b0643-382e-4f29-9167-2e7deb989d95\", \"name\": \"eve\", \"display_name\": \"Eve Park-Lee\", \"creation_time\": \"2026-11-12T16:17:23Z\"}]",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "get_user_teams",
+      "method": "POST",
+      "path": "/api/users/get_user_teams",
+      "body": "{\"id\": \"224b0643-382e-4f29-9167-2e7deb989d95\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "[{\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\", \"name\": \"mobile\", \"description\": \"iOS and Android apps\", \"creation_time\": \"2026-11-12T16:17:23Z\", \"admin\": \"b0e6407b-2b89-4c7f-b860-bcedb31967fd\"}]",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "create_board",
+      "method": "POST",
+      "path": "/api/boards/create_board",
+      "body": "{\"name\": \"Release 1\", \"description\": \"First store release\", \"team_id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{\"id\": \"50c432d9-0356-495e-a0cc-273bb6f6f126\"}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "add_task",
+      "method": "POST",
+      "path": "/api/boards/add_task",
+      "body": "{\"title\": \"Submit to the store\", \"board_id\": \"50c432d9-0356-495e-a0cc-273bb6f6f126\", \"user_id\": \"224b0643-382e-4f29-9167-2e7deb989d95\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{\"id\": \"e4fe7fc1-99a8-4477-bf80-ea882ad727b6\"}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "list_boards",
+      "method": "POST",
+      "path": "/api/boards/list_boards",
+      "body": "{\"id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "[{\"id\": \"50c432d9-0356-495e-a0cc-273bb6f6f126\", \"name\": \"Release 1\", \"description\": \"First store release\", \"team_id\": \"71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e\", \"status\": \"OPEN\", \"creation_time\": \"2026-11-12T16:17:23Z\", \"end_time\": null}]",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "update_task_status",
+      "method": "POST",
+      "path": "/api/boards/update_task_status",
+      "body": "{\"id\": \"e4fe7fc1-99a8-4477-bf80-ea882ad727b6\", \"status\": \"COMPLETE\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "close_board",
+      "method": "POST",
+      "path": "/api/boards/close_board",
+      "body": "{\"id\": \"50c432d9-0356-495e-a0cc-273bb6f6f126\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{}",
+      "allow": null,
+      "note": null
+    },
+    {
+      "label": "export_board",
+      "method": "POST",
+      "path": "/api/boards/export_board",
+      "body": "{\"id\": \"50c432d9-0356-495e-a0cc-273bb6f6f126\"}",
+      "content_type": "application/json",
+      "status": 200,
+      "response": "{\"out_file\": \"mobile_release-1_20261112T161723Z.txt\"}",
+      "allow": null,
+      "note": null
+    }
+  ],
+  "errors": [
+    {
+      "label": "Malformed JSON",
+      "method": "POST",
+      "path": "/api/users/create_user",
+      "body": "{\"name\": ",
+      "content_type": "application/json",
+      "status": 400,
+      "response": "{\"error\": {\"code\": \"invalid_input\", \"message\": \"Request is not valid JSON: Expecting value at position 9.\"}}",
+      "allow": null,
+      "note": "400: the body is not valid JSON"
+    },
+    {
+      "label": "Unknown id",
+      "method": "POST",
+      "path": "/api/users/describe_user",
+      "body": "{\"id\": \"f976d9f9-c531-4d0e-93dd-8a873b8f8617\"}",
+      "content_type": "application/json",
+      "status": 404,
+      "response": "{\"error\": {\"code\": \"not_found\", \"message\": \"User 'f976d9f9-c531-4d0e-93dd-8a873b8f8617' does not exist.\"}}",
+      "allow": null,
+      "note": "404: no user has this id"
+    },
+    {
+      "label": "Name taken",
+      "method": "POST",
+      "path": "/api/users/create_user",
+      "body": "{\"name\": \"dana\", \"display_name\": \"Dana again\"}",
+      "content_type": "application/json",
+      "status": 409,
+      "response": "{\"error\": {\"code\": \"duplicate\", \"message\": \"A user named 'dana' already exists.\"}}",
+      "allow": null,
+      "note": "409: a duplicate name"
+    },
+    {
+      "label": "Closed board",
+      "method": "POST",
+      "path": "/api/boards/add_task",
+      "body": "{\"title\": \"Late fix\", \"board_id\": \"50c432d9-0356-495e-a0cc-273bb6f6f126\", \"user_id\": \"224b0643-382e-4f29-9167-2e7deb989d95\"}",
+      "content_type": "application/json",
+      "status": 409,
+      "response": "{\"error\": {\"code\": \"invalid_state\", \"message\": \"Tasks can only be added to an OPEN board; 'Release 1' is closed.\"}}",
+      "allow": null,
+      "note": "409: not allowed in the current state"
+    },
+    {
+      "label": "Wrong HTTP method",
+      "method": "GET",
+      "path": "/api/users/create_user",
+      "body": null,
+      "content_type": null,
+      "status": 405,
+      "response": "{\"error\": {\"code\": \"method_not_allowed\", \"message\": \"Use POST for /api/users/create_user.\"}}",
+      "allow": "POST",
+      "note": "405: this endpoint takes POST; the Allow header says so"
+    },
+    {
+      "label": "Not JSON",
+      "method": "POST",
+      "path": "/api/users/create_user",
+      "body": "{\"name\": \"x\", \"display_name\": \"X\"}",
+      "content_type": "text/plain",
+      "status": 415,
+      "response": "{\"error\": {\"code\": \"unsupported_media_type\", \"message\": \"Send the request body as application/json.\"}}",
+      "allow": null,
+      "note": "415: the body must be sent as application/json"
+    },
+    {
+      "label": "No such endpoint",
+      "method": "POST",
+      "path": "/api/users/delete_user",
+      "body": "{}",
+      "content_type": "application/json",
+      "status": 404,
+      "response": "{\"error\": {\"code\": \"not_found\", \"message\": \"There is no API at /api/users/delete_user.\"}}",
+      "allow": null,
+      "note": "404: there is no delete API"
+    }
+  ],
+  "index": {
+    "users": {
+      "create_user": "POST",
+      "list_users": "GET",
+      "describe_user": "POST",
+      "update_user": "POST",
+      "get_user_teams": "POST"
+    },
+    "teams": {
+      "create_team": "POST",
+      "list_teams": "GET",
+      "describe_team": "POST",
+      "update_team": "POST",
+      "add_users_to_team": "POST",
+      "remove_users_from_team": "POST",
+      "list_team_users": "POST"
+    },
+    "boards": {
+      "create_board": "POST",
+      "close_board": "POST",
+      "add_task": "POST",
+      "update_task_status": "POST",
+      "list_boards": "POST",
+      "export_board": "POST"
+    }
+  },
+  "labels": {
+    "b0e6407b-2b89-4c7f-b860-bcedb31967fd": "user dana",
+    "224b0643-382e-4f29-9167-2e7deb989d95": "user eve",
+    "71c3ccb3-9d90-4b6f-b73d-ef6dbde7839e": "team mobile",
+    "50c432d9-0356-495e-a0cc-273bb6f6f126": "board Release 1",
+    "e4fe7fc1-99a8-4477-bf80-ea882ad727b6": "task Submit to the store"
+  }
+}
