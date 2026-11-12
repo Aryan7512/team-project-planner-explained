@@ -4,6 +4,8 @@ An interactive, one-page walk through [Team Project Planner](https://github.com/
 what happens inside the planner when you create a user, fill a team, close a board or export it, shown
 with the real code's real output.
 
+**Live site:** https://team-project-planner-explained.vercel.app
+
 ## How it stays accurate
 
 Nothing on the page is typed by hand. `tools/capture.py` takes the planner's latest commit, runs the real
