@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team Project Planner, explained</title>
+  <meta name="description" content="A walk through a Django team project planner, following real requests through the real code.">
+  <meta name="color-scheme" content="light dark">
+  <script>try { var t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
+  <link rel="stylesheet" href="assets/site.css">
+  <script type="module" src="assets/site.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to the content</a>
+
+  <header class="masthead">
+    <div class="masthead__inner">
+      <a class="masthead__title" href="#top">Team Project Planner <span>explained</span></a>
+      <nav class="masthead__links" aria-label="Site">
+        <a href="#contents">Contents</a>
+        <a href="https://github.com/Aryan7512/team-project-planner">Source code</a>
+        <button class="theme-toggle" type="button" aria-label="Switch between light and dark">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25"/><path d="M10 2.75v14.5a7.25 7.25 0 0 0 0-14.5z"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="intro" id="top">
+      <p class="eyebrow">A walk through the code</p>
+      <h1>What happens inside the team&nbsp;project&nbsp;planner</h1>
+      <p class="lede">
+        The planner is a small Django service that keeps users, teams and project boards,
+        and answers every request with JSON. This page follows real requests through the real
+        code. Every request, response, error message, line of code and SQL statement shown here
+        was recorded by running the planner itself; none of it was typed by hand.
+      </p>
+      <dl class="facts" data-facts>
+        <div><dt>Recorded from</dt><dd data-fact="commit">—</dd></div>
+        <div><dt>Stack</dt><dd data-fact="stack">—</dd></div>
+        <div><dt>Tests</dt><dd data-fact="tests">—</dd></div>
+      </dl>
+    </section>
+
+    <nav class="contents" id="contents" aria-labelledby="contents-title">
+      <h2 id="contents-title">Contents</h2>
+      <ol>
+        <li><a href="#brief">The brief</a></li>
+        <li><a href="#pipeline">One request, start to finish</a></li>
+        <li><a href="#data">Where the data lives</a></li>
+        <li><a href="#seats">A team has fifty seats</a></li>
+        <li><a href="#board">A board, from open to closed</a></li>
+        <li><a href="#race">Two requests at the same moment</a></li>
+        <li><a href="#export">The board export</a></li>
+        <li><a href="#decisions">Reading between the lines</a></li>
+        <li><a href="#quality">How we know it works</a></li>
+        <li><a href="#http">The same methods over HTTP</a></li>
+      </ol>
+    </nav>
+
+    <section class="chapter" id="brief" aria-labelledby="brief-title">
+      <header class="chapter__head">
+        <span class="chapter__number">01</span>
+        <h2 id="brief-title">The brief</h2>
+      </header>
+      <div class="prose">
+        <p>
+          The assignment arrived as three Python classes with empty methods. Each method had a
+          docstring describing the JSON it receives, the JSON it returns and the rules it must
+          enforce, such as <q>user name must be unique</q> or <q>you can only close boards with all
+          tasks marked as COMPLETE</q>.
+        </p>
+        <p>
+          The task was to write a module that extends those classes, built with Django, which keeps
+          its data in local files inside a <code>db</code> folder and can export a board as a text file
+          into an <code>out</code> folder. Requests and responses are JSON strings, and a method must raise
+          an exception when its input breaks a rule.
+        </p>
+      </div>
+      <figure class="figure figure--wide">
+        <div class="classes" data-classes><p class="loading">Loading the method list…</p></div>
+        <figcaption>
+          The provided base classes and the class that implements each one. Every signature is
+          read from the provided files; select one to see its docstring on GitHub. Methods marked
+          <span class="kind kind--write">writes</span> change stored data, the one marked
+          <span class="kind kind--export">file</span> writes an export, and the rest only read.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="chapter" id="pipeline" aria-labelledby="pipeline-title">
+      <header class="chapter__head">
+        <span class="chapter__number">02</span>
+        <h2 id="pipeline-title">One request, start to finish</h2>
+      </header>
+      <div class="prose">
+        <p>
+          The ten methods that change stored data handle a request in the same five steps. A request
+          that breaks a rule stops at the step that catches it, and nothing after that step runs.
+          The seven methods that only read parse and check their request the same way (two of them,
+          <code>list_users</code> and <code>list_teams</code>, take none), then look up what was asked
+          for and reply without opening a transaction. <code>export_board</code> reads a board and
+          writes a file to <code>out</code> instead of saving to the database.
+        </p>
+        <ol class="steps">
+          <li><strong>Parse.</strong> The text must be valid JSON, and it must describe an object.</li>
+          <li><strong>Check.</strong> Required fields must be present, and every field sent must have
+            the right type and fit its length limit. Surrounding whitespace is trimmed first.</li>
+          <li><strong>Rules.</strong> A database transaction starts and takes the write lock. The
+            planner looks up every id in the request and applies the rules that depend on stored
+            data: names that must be unique, the fifty-member cap, boards that must be open.</li>
+          <li><strong>Save.</strong> The changes are written and the transaction commits.</li>
+          <li><strong>Reply.</strong> The method returns a JSON string.</li>
+        </ol>
+        <p>
+          Steps three and four share one transaction, so a request that fails at step three ends in
+          a rollback and leaves the database exactly as it was.
+        </p>
+      </div>
+
+      <figure class="figure figure--wide pipeline" data-pipeline aria-label="Interactive: a request moving through the five steps">
+        <div class="pipeline__layout">
+          <div class="pipeline__pick">
+            <p class="label" id="scenario-label">Pick a request</p>
+            <div class="scenarios" role="group" aria-labelledby="scenario-label" data-scenarios></div>
+          </div>
+
+          <div class="pipeline__run">
+            <div class="track" data-track>
+              <div class="track__line" aria-hidden="true"><span class="track__fill" data-fill></span></div>
+              <ol class="track__stops" data-stops></ol>
+            </div>
+            <div class="pipeline__controls">
+              <button type="button" class="button" data-replay>Replay</button>
+              <button type="button" class="button button--quiet" data-step>Next step</button>
+              <span class="pipeline__status" data-status aria-live="polite"></span>
+            </div>
+            <ol class="log" data-log></ol>
+          </div>
+        </div>
+
+        <div class="io">
+          <section class="io__panel" aria-labelledby="io-call">
+            <h3 class="label" id="io-call">The call</h3>
+            <pre class="code" data-call></pre>
+            <dl class="ids" data-ids></dl>
+          </section>
+          <section class="io__panel" aria-labelledby="io-result">
+            <h3 class="label" id="io-result">What the caller gets</h3>
+            <div data-result></div>
+          </section>
+          <section class="io__panel io__panel--rows" aria-labelledby="io-rows">
+            <h3 class="label" id="io-rows">Rows in the database</h3>
+            <table class="rows" data-rows></table>
+          </section>
+        </div>
+        <figcaption>
+          Before these requests ran: <span data-setup></span>
+        </figcaption>
+      </figure>
+
+      <div class="prose">
+        <p>
+          A request rejected at step three has already talked to the database. A taken name, an
+          unknown id or a closed board can only be discovered by reading stored data, so the planner
+          asks, finds the problem and ends the transaction with <code>ROLLBACK</code>; the row counts
+          before and after are identical. Requests rejected at steps one and two never open a
+          transaction at all.
+        </p>
+      </div>
+    </section>
+
+    <section class="chapter" id="data" aria-labelledby="data-title">
+      <header class="chapter__head">
+        <span class="chapter__number">03</span>
+        <h2 id="data-title">Where the data lives</h2>
+      </header>
+      <div class="prose">
+        <p>
+          Everything the planner stores lives in one file, <code>db/planner.sqlite3</code>. Django turns
+          five model classes into five SQLite tables, and the planner reads and writes them only through
+          Django, so callers only ever see the APIs.
+        </p>
+        <p>
+          Every row has a random UUID as its id and records when it was created. Users and teams are
+          linked through a separate membership table, which is how one user can belong to many teams.
+          A team's admin is only a reference to a user: being admin does not create a membership.
+        </p>
+        <p>
+          The rules that matter most are written into the tables themselves as well as into the Python
+          code: unique names, one membership per user per team, only known statuses, and a closed board
+          always having an end time. If a bug ever skipped a check in the code, the database would still
+          refuse the row.
+        </p>
+      </div>
+      <figure class="figure figure--wide" aria-label="Diagram of the five tables">
+        <div class="schema" data-schema><p class="loading">Loading the tables…</p></div>
+        <figcaption data-schema-caption>
+          The tables as Django creates them, read from the models and from SQLite itself. An arrow is a
+          reference to another table. <b>CASCADE</b>: the rows go with their owner, as a board's tasks go
+          with the board. <b>PROTECT</b>: a row cannot be deleted while something refers to it, as with a
+          team's admin. The planner has no delete API, so these only guard against future code.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="chapter" id="seats" aria-labelledby="seats-title">
+      <header class="chapter__head">
+        <span class="chapter__number">04</span>
+        <h2 id="seats-title">A team has fifty seats</h2>
+      </header>
+      <div class="prose">
+        <p>
+          The brief says to <q>cap the max users that can be added to 50</q>. The planner reads that as a
+          limit on the team: at most fifty members, and so at most fifty ids in any one add or remove
+          request. A limit on each request alone would let a team grow past fifty, one request at a time.
+        </p>
+        <p>
+          Three more rules shape every change. Users who are already members are skipped, not counted
+          twice. One unknown id fails the whole request, so nobody in that batch is added. And the admin
+          sits outside the fifty, because being admin is not membership.
+        </p>
+      </div>
+      <figure class="figure figure--wide stepper-figure" data-seats aria-label="Interactive: fifty seats of one team"></figure>
+    </section>
+
+    <section class="chapter" id="board" aria-labelledby="board-title">
+      <header class="chapter__head">
+        <span class="chapter__number">05</span>
+        <h2 id="board-title">A board, from open to closed</h2>
+      </header>
+      <div class="prose">
+        <p>
+          A board holds a team's tasks. While the board is open, a task can move between
+          <code>OPEN</code>, <code>IN_PROGRESS</code> and <code>COMPLETE</code> in any direction. The
+          brief allows a board to close only when every one of its tasks is <code>COMPLETE</code>.
+          Closing records an end time and takes the board off the team's list of open boards.
+        </p>
+        <p>
+          After that the board is frozen: no new tasks, no status changes, and it cannot be closed a
+          second time. Reopening a task would break the rule the board was closed under.
+        </p>
+      </div>
+      <figure class="figure figure--wide stepper-figure" data-board aria-label="Interactive: a board's life from open to closed"></figure>
+    </section>
+
+    <section class="chapter" id="race" aria-labelledby="race-title">
+      <header class="chapter__head">
+        <span class="chapter__number">06</span>
+        <h2 id="race-title">Two requests at the same moment</h2>
+      </header>
+      <div class="prose">
+        <p>
+          Adding users to a team is a check followed by a write: count the members, then add the new
+          ones. If two requests could both count before either wrote, both would see room, and together
+          they could overfill the team.
+        </p>
+        <p>
+          SQLite lets only one connection write at a time. One line in the planner's settings makes each
+          write transaction take that lock as soon as it begins, before it counts anything. A second
+          request then waits until the first has committed, then counts, and gets the planner's own
+          error.
+        </p>
+        <p data-race-setup>
+          To test it, separate processes each tried to add a batch of different users to the same empty
+          team at the same moment. Only one batch can fit. The experiment ran with the setting and, for
+          comparison, with that one line removed.
+        </p>
+      </div>
+      <figure class="figure figure--wide" data-race aria-label="Chart: six processes racing to add users to one team"></figure>
+      <div class="prose">
+        <p data-race-after>
+          Without the setting the cap still held, because SQLite refused the conflicting writes. But a
+          losing request could get back either the planner's <code>InvalidStateError</code> or a raw
+          <code>OperationalError</code> saying <q>database is locked</q>, depending on timing. With the
+          setting, every losing request waits its turn and gets <code>InvalidStateError</code>.
+        </p>
+      </div>
+    </section>
+
+    <section class="chapter" id="export" aria-labelledby="export-title">
+      <header class="chapter__head">
+        <span class="chapter__number">07</span>
+        <h2 id="export-title">The board export</h2>
+      </header>
+      <div class="prose">
+        <p>
+          <code>export_board</code> writes a board to a text file in <code>out</code> and returns the
+          file's name. The file is meant for a person, so it reads top to bottom like the board itself.
+        </p>
+        <p>
+          It is plain UTF-8, 72 characters wide, with no right-hand borders, so names in any language or
+          with emoji cannot break the layout. Line breaks and control characters inside names and
+          descriptions become spaces. Every export gets a new file: an export in the same second as an
+          earlier one gets <code>-2</code> on its name instead of replacing it.
+        </p>
+      </div>
+      <figure class="figure figure--wide" data-export aria-label="A real board export with its parts labelled"></figure>
+    </section>
+
+    <section class="chapter" id="decisions" aria-labelledby="decisions-title">
+      <header class="chapter__head">
+        <span class="chapter__number">08</span>
+        <h2 id="decisions-title">Reading between the lines</h2>
+      </header>
+      <div class="prose">
+        <p data-decisions-intro></p>
+        <p>
+          The decisions below are read from the planner's README. Where a line of the brief prompted a
+          decision, that line is quoted beside it, linked to where it sits in the provided files.
+        </p>
+      </div>
+      <div class="figure figure--wide decisions" data-decisions></div>
+    </section>
+
+    <section class="chapter" id="quality" aria-labelledby="quality-title">
+      <header class="chapter__head">
+        <span class="chapter__number">09</span>
+        <h2 id="quality-title">How we know it works</h2>
+      </header>
+      <div class="prose">
+        <p>
+          The behaviour shown on this page is covered by the planner's own tests, apart from the race in
+          chapter 6, which depends too much on timing for a test and was run as the experiment shown
+          there. The tests try every limit from both sides, every error path, data surviving between
+          separate processes, the exact export layout and the HTTP endpoints. GitHub runs the whole
+          suite on every push.
+        </p>
+      </div>
+      <div class="figure figure--wide quality" data-quality></div>
+      <div class="prose">
+        <p>
+          The planted-bug check earned its place during development. Its first round found a gap: the
+          tests did not notice when the progress percentage was rounded up instead of down, because the
+          sample board gave the same number either way. A test for a case where the two differ was
+          added, and that bug is now caught, as the table shows.
+        </p>
+      </div>
+    </section>
+
+    <section class="chapter" id="http" aria-labelledby="http-title">
+      <header class="chapter__head">
+        <span class="chapter__number">10</span>
+        <h2 id="http-title">The same methods over HTTP</h2>
+      </header>
+      <div class="prose">
+        <p>
+          The same eighteen methods are also available over HTTP through a thin Django view, at
+          <code>/api/&lt;group&gt;/&lt;method&gt;</code>. Methods that take a request are called with
+          <code>POST</code> and a JSON body, which is handed to the method unchanged.
+          <code>list_users</code> and <code>list_teams</code> take no request and use <code>GET</code>.
+          The response body is exactly what the method returns, and planner errors become JSON with a
+          matching status code.
+        </p>
+        <p>
+          Requests must be sent as <code>application/json</code>. Browsers will not send that to another
+          site without its permission, which this server never gives, so a web page cannot quietly send
+          requests to a planner running on your machine. The API sets no cookies and has no logins, so
+          there is nothing for Django's CSRF protection to guard.
+        </p>
+      </div>
+      <figure class="figure figure--wide" data-http aria-label="Interactive: every endpoint with a real request and response"></figure>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Written by Aryan Tiwari. <a href="https://github.com/Aryan7512/team-project-planner">The planner's source code</a>.
+      Everything above was recorded from <a data-fact-link="commit" href="https://github.com/Aryan7512/team-project-planner">the planner</a>
+      by <a href="https://github.com/Aryan7512/team-project-planner-explained/blob/main/tools/capture.py">this script</a>.
+    </p>
+  </footer>
+  <noscript><p class="noscript">The interactive parts of this page need JavaScript. The text reads fine without it.</p></noscript>
+</body>
+</html>
